@@ -63,7 +63,7 @@ int main ( int argc, char **argv )
 		qr_gray = Mat::zeros(100, 100, CV_8UC1);
 	   	qr_thres = Mat::zeros(100, 100, CV_8UC1);		
 		
-		capture >> image;						// Capture Image from Image Input
+		// capture >> image;				// For Video input		// Capture Image from Image Input
 
 		cvtColor(image,gray,CV_RGB2GRAY);		// Convert Image captured from Image Input to GrayScale	
 		Canny(gray, edges, 100 , 200, 3);		// Apply Canny edge detection on the gray image
