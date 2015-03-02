@@ -56,6 +56,7 @@ int main ( int argc, char **argv )
 	    
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
+	vector<Point> pointsseq;    //used to save the approximated sides of each contour
 
 	int mark,A,B,C,top,right,bottom,median1,median2,outlier;
 	float AB,BC,CA, dist,slope, areat,arear,areab, large, padding;
@@ -102,25 +103,30 @@ int main ( int argc, char **argv )
 		// The below demonstrates the first method
 		
 		for( int i = 0; i < contours.size(); i++ )
-		{
-			int k=i;
-			int c=0;
-
-			while(hierarchy[k][2] != -1)
-			{
-				k = hierarchy[k][2] ;
+		{	
+		        //Find the approximated polygon of the contour we are examining
+		        approxPolyDP(contours[i], pointsseq, arcLength(contours[i], true)*0.02, true);  
+		        if (pointsseq.size() == 4)      // only quadrilaterals contours are examined
+		        { 
+				int k=i;
+				int c=0;
+	
+				while(hierarchy[k][2] != -1)
+				{
+					k = hierarchy[k][2] ;
+					c = c+1;
+				}
+				if(hierarchy[k][2] != -1)
 				c = c+1;
-			}
-			if(hierarchy[k][2] != -1)
-			c = c+1;
-
-			if (c >= 5)
-			{	
-				if (mark == 0)		A = i;
-				else if  (mark == 1)	B = i;		// i.e., A is already found, assign current contour to B
-				else if  (mark == 2)	C = i;		// i.e., A and B are already found, assign current contour to C
-				mark = mark + 1 ;
-			}
+	
+				if (c >= 5)
+				{	
+					if (mark == 0)		A = i;
+					else if  (mark == 1)	B = i;		// i.e., A is already found, assign current contour to B
+					else if  (mark == 2)	C = i;		// i.e., A and B are already found, assign current contour to C
+					mark = mark + 1 ;
+				}
+		        }
 		} 
 
 		
